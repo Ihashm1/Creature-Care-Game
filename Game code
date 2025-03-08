@@ -1,0 +1,316 @@
+/* ***************************************
+  @author    Ishrat Hashmi
+  @SID       230353330
+  @date      01 October 2024
+  @version   1
+    A program that describes the aim of
+    the game and allows the user to pick
+    a creature.
+   ****************************************/
+import java.util.Random;
+import java.util.Scanner;
+import java.io.*;
+
+class CreatureRecord {
+    String name;
+    int hunger;
+    int anger;
+    int illness;
+    int killerScore;
+    int roundsSurvived;
+}
+public class CreatureCareGame
+{
+    
+    public static void main(String[] args) throws IOException 
+    {
+        creatureCareProgram();
+        return;
+    }
+
+    // Game description, Explains the game to the user
+    //
+    public static void gameDescription() {
+        System.out.println("**********************************************************************************");
+        System.out.println("\nWelcome to the Creature Care Game!");
+        System.out.println("You will take care of your creatures by feeding, petting, or medicating them.");
+        System.out.println("\nCreatures include:");
+        System.out.println("Unicorn");
+        System.out.println("Minotaur");
+        System.out.println("Magical Cat");
+        System.out.println("Elf");
+        System.out.println("\nWARNING: Take care of your creatures well before they become rabid and kill you!");
+        System.out.println("HINT: KEEP YOUR ANIMALS' KILLER SCORES BELOW 15 FOR AS LONG AS POSSIBLE!!");
+        System.out.println("**********************************************************************************");
+        return;
+    }
+    
+    // Takes user string input and returns it
+    //
+    public static String inputString (String question)
+    {
+        String ans;
+        Scanner sc = new Scanner(System.in);
+    
+        System.out.println(question);
+        ans = sc.nextLine();
+    
+        return ans;
+    } 
+    
+    // Takes user int input and returns it
+    //
+    public static int inputInt(String question)
+        {
+            int ans;
+            Scanner sc = new Scanner(System.in);
+    
+            System.out.println(question);
+            ans = Integer.parseInt(sc.nextLine());
+    
+            return ans;
+        }
+    
+    // Create a new CreatureRecord with default values
+    //
+    public static CreatureRecord createCreature(String name) 
+    {
+        CreatureRecord creature = new CreatureRecord();
+        creature.name = name;
+        creature.hunger = 0;
+        creature.anger = 0;
+        creature.illness = 0;
+        creature.killerScore = 0;
+        creature.roundsSurvived = 0;
+        return creature;
+    }
+
+    // Retrieve the name from a specific creature's record.
+    //
+    public static String getName(CreatureRecord creature) 
+    {
+        return creature.name;
+    }
+    
+    // Sets the hunger field and returns the updated record
+    //
+    public static CreatureRecord setHunger(CreatureRecord creature, int value) 
+    {
+        creature.hunger = value;
+        return creature;
+    }
+    
+     // retrieve the current hunger value from a specific creature's record.
+     //
+     public static int getHunger(CreatureRecord creature) 
+    {
+        return creature.hunger;
+    }
+
+    // set the anger field score in a record of a specific creature.
+    //
+    public static CreatureRecord setAnger(CreatureRecord creature, int value) 
+    {
+        creature.anger = value;
+        return creature;
+    }
+    // retrieve the current anger value from a specific creature's record. 
+    //
+     public static int getAnger(CreatureRecord creature) 
+    {
+        return creature.anger;
+    }
+
+    // set the illness field score in a record of a specific creature.
+    //
+    public static CreatureRecord setIllness(CreatureRecord creature, int value) 
+    {
+        creature.illness = value;
+        return creature;
+    }
+
+    // retrieve the current illness value from a specific creature's record.
+    //
+    public static int getIllness(CreatureRecord creature) 
+    {
+        return creature.illness;
+    }
+    
+    // to update the killerScore field in a record of a specific creature
+    //
+    public static CreatureRecord updateKillerScore(CreatureRecord creature) 
+    {
+        creature.killerScore = creature.hunger + creature.anger + creature.illness;
+        return creature;
+    }
+
+    //retrieve the current killerScore value from a specific creature's record. 
+    //
+     public static int getKillerScore(CreatureRecord creature) 
+    {
+        return creature.killerScore;
+    }
+
+    // to increment the roundsSurvived field in a record of a specific creature.
+    //
+    public static CreatureRecord setRoundsSurvived(CreatureRecord creature) 
+    {
+        creature.roundsSurvived++;
+        return creature;
+    }
+
+    // to retrieve the current rounds survived value from a specific creature's record. 
+    //
+    public static int getRoundsSurvived(CreatureRecord creature) 
+    {
+        return creature.roundsSurvived;
+    }
+    
+
+    // Increase random scores, Adds random values to hunger, anger, and illness, updates killer score
+    //
+    public static CreatureRecord increaseRandomScores(CreatureRecord creature) 
+    {
+        Random rand = new Random();
+        System.out.println("\nYour " + getName(creature) + " is getting upset... ");
+
+        creature = setHunger(creature, getHunger(creature) + rand.nextInt(4));
+        creature = setAnger(creature, getAnger(creature) + rand.nextInt(4));
+        creature = setIllness(creature, getIllness(creature) + rand.nextInt(4));
+        return updateKillerScore(creature);
+    }
+
+   // User care choice, Allows the user to provide care to update scores
+    //
+    public static CreatureRecord userCareChoice(CreatureRecord creature) 
+    {
+        String care;
+        care = inputString("\nWhat care option would you like to provide? Choose from FEED, PET, or MEDICATE.");
+    
+        while (! (care.equals("FEED") || care.equals("PET") || care.equals("MEDICATE")) ) 
+        {
+            System.out.println("enter a valid care option in caps of FEED, PET, or MEDICATE");
+            care = inputString("\nWhat care option would you like to provide? Choose from FEED, PET, or MEDICATE.");
+        }
+        
+            if (care.equals("FEED")) {
+                System.out.println("\nYou feed " + getName(creature) + " its favourite meal! Lowering hunger score by 2!");
+                creature = setHunger(creature, (getHunger(creature) - 2));
+            } else if (care.equals("PET")) {
+                System.out.println("\n" + creature.name + " loves the pets! Lowering anger score by 2!");
+                creature = setAnger(creature, (getAnger(creature) - 2));
+            } else if (care.equals("MEDICATE")) {
+                System.out.println("\nYou provide medicine to " + creature.name + ". Lowering illness score by 2!");
+                creature = setIllness(creature, (getIllness(creature) - 2));
+            }
+    
+        return updateKillerScore(creature);
+    }
+    
+    // Print Creature Scores
+    //
+    public static void printCreatureScore(CreatureRecord creature)
+    {
+        System.out.println("\n" + getName(creature) + "'s scores are currently:");
+        System.out.println("Hunger score: " + getHunger(creature));
+        System.out.println("Anger score: " + getAnger(creature));
+        System.out.println("Illness score: " + getIllness(creature));
+        System.out.println("Killer score: " + getKillerScore(creature));
+
+        return;
+    }
+    
+    // Display message based on killer score
+    //
+    public static void displayMessage(CreatureRecord creature) 
+    {
+    
+        int killerScore = creature.killerScore;
+        if (killerScore <= 5) {
+            System.out.println("\nThe " + getName(creature) + " is looking PEACEFUL.");
+        } else if (killerScore <= 10) {
+            System.out.println("\nThe " + getName(creature) + " is looking MIFFED.");
+        } else if (killerScore <= 15) {
+            System.out.println("\nThe " + getName(creature) + " is looking DANGEROUS.");
+        } else {
+            System.out.println("\nOh no! The killer score has reached " + killerScore);
+            System.out.println("The " + getName(creature) + " is looking RABID.... RUN!!");
+        }
+    }
+
+    public static boolean playTurn(CreatureRecord creature) throws IOException {
+        final int targetScore = 15;
+        while (creature.killerScore <= targetScore) {
+            creature = increaseRandomScores(creature);
+            printCreatureScore(creature);
+            displayMessage(creature);
+            if (creature.killerScore <= targetScore) {
+                creature = userCareChoice(creature);
+                creature = setRoundsSurvived(creature);
+                printCreatureScore(creature);
+                displayMessage(creature);
+                if (inputString("Would you like to save your progress? (YES/NO)").equalsIgnoreCase("YES")) {
+                    saveSingleCreature(creature);
+                    System.out.println("Progress saved. You can continue next time!");
+                    return true; // Breaks the game loop and indicates a save
+                }
+            }
+        }
+        System.out.println("\n" + creature.name + " survived for " + creature.roundsSurvived + " rounds!");
+        return false;
+    }
+
+    public static void saveSingleCreature(CreatureRecord creature) throws IOException {
+        FileWriter writer = new FileWriter(creature.name + "_save.txt");
+        writer.write(creature.name + "," + creature.hunger + "," + creature.anger + "," + creature.illness + "," + creature.killerScore + "," + creature.roundsSurvived);
+        writer.close();
+    }
+
+    public static CreatureRecord loadSingleCreature(String filename) throws IOException {
+        Scanner fileScanner = new Scanner(new File(filename));
+        String line = fileScanner.nextLine();
+        String[] data = line.split(",");
+        CreatureRecord creature = createCreature(data[0]);
+        creature.hunger = Integer.parseInt(data[1]);
+        creature.anger = Integer.parseInt(data[2]);
+        creature.illness = Integer.parseInt(data[3]);
+        creature.killerScore = Integer.parseInt(data[4]);
+        creature.roundsSurvived = Integer.parseInt(data[5]);
+        fileScanner.close();
+
+        // Check if the creature is rabid and reset scores if necessary
+        if (creature.killerScore > 15) {
+            System.out.println("\nThe creature " + creature.name + " had turned rabid in the last game. Resetting its scores...");
+            creature.hunger = 0;
+            creature.anger = 0;
+            creature.illness = 0;
+            creature.killerScore = 0;
+            creature.roundsSurvived = 0;
+        }
+        return creature;
+    }
+        
+
+    public static void creatureCareProgram() throws IOException {
+        gameDescription();
+        int numberOfCreatures = inputInt("How many creatures would you like to care for?");
+        for (int i = 0; i < numberOfCreatures; i++) {
+            String name = inputString("What is the name of creature #" + (i + 1) + "?");
+            CreatureRecord creature;
+            if (inputString("Do you want to load a saved game for " + name + "? (YES/NO)").equalsIgnoreCase("YES")) {
+                creature = loadSingleCreature(name + "_save.txt");
+            } else {
+                // Destroy previous save if not loading
+                PrintWriter outputStream = new PrintWriter(new FileWriter(name + "_save.txt"));
+                outputStream.close();
+                creature = createCreature(name);
+            }
+            if (playTurn(creature)) {
+                return; // Exit the game loop when save is performed
+            }
+        }
+        System.out.println("Game Over. All creatures handled.");
+    }
+}
+  
+
